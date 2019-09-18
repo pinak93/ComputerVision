@@ -21,7 +21,7 @@ int T_ROWS,T_COLS,T_BYTES;
 int i,j,Threshold=atoi(argv[1]); 
 int r=0,c=0;
 int sum=0,total=0; 
-int max=0;
+int max=0,min=0;
 int counter=0;
 int r1=0,c1=0;
 
@@ -91,23 +91,22 @@ sum=sum/total;
        }
 	if(max<sum){
 	max=sum;
+	}	
+	if(min>sum){
+	min=sum;
 	}
-	
 		MSF_Image[r*COLS+c]=sum;
 		sum=0;
 	}
    }
-
 	
 	
    for(r=i;r<ROWS-i;r++){
     for(c=j;c<COLS-j;c++){
      
-      int finalsum=(unsigned int)(((double)MSF_Image[r*COLS+c]/(double)max)*255);
-      MSF_Image[r*COLS+c]=finalsum;
+      image[r*COLS+c]=((((double)MSF_Image[r*COLS+c]-min)/(double)(max-min))*255);
 		}
-	 
-   }
+	}
 	
 int TP=0,FP=0;
 int TN=0,FN=0;	
@@ -125,7 +124,7 @@ int TN=0,FN=0;
 	  
   for(r=-i;r<=i;r++){
     for(c=-j;c<=j;c++){	
-		if(MSF_Image[(pixelr+r)*COLS+(pixelc+c)]>=Threshold){
+		if(image[(pixelr+r)*COLS+(pixelc+c)]>=Threshold){
 			if(line[0]=='e'){
 			TP++;
 			Flag=1;
@@ -157,6 +156,6 @@ int TN=0,FN=0;
 /* write out brighter.ppm, the output result */ 
 fpt=fopen("brighter.ppm","w"); 
 fprintf(fpt,"P5 %d %d 255\n",COLS,ROWS); 
-fwrite(MSF_Image,1,ROWS*COLS,fpt); 
+fwrite(image,1,ROWS*COLS,fpt); 
 fclose(fpt); 
 } 
