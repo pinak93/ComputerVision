@@ -4,14 +4,11 @@
 #include <string.h> 
 int main (int argc, char *argv[]) 
 { 
-
 	if (argc!=2)  
     { 
         printf("Enter Threshold"); 
         return 0; 
     } 
-  
-
 FILE *fpt2,*fpt,*ftr; 
 unsigned char *template; 
 unsigned char *image; 
@@ -152,11 +149,7 @@ int TN=0,FN=0;
 			TN++;
 			} 
   }
-	  
 	  Flag=0;
   }///End While
-
 	printf("TP-%d FP-%d TN-%d FN-%d  Total-%d Threshold-%d\n",TP,FP,TN,FN,TP+FP+TN+FN,Threshold);
-	
-	
 } 
