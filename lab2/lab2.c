@@ -152,4 +152,11 @@ int TN=0,FN=0;
 	  Flag=0;
   }///End While
 	printf("TP-%d FP-%d TN-%d FN-%d  Total-%d Threshold-%d\n",TP,FP,TN,FN,TP+FP+TN+FN,Threshold);
+
+
+/* write out brighter.ppm, the output result */ 
+fpt=fopen("brighter.ppm","w"); 
+fprintf(fpt,"P5 %d %d 255\n",COLS,ROWS); 
+fwrite(MSF_Image,1,ROWS*COLS,fpt); 
+fclose(fpt); 
 } 
