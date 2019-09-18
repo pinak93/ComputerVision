@@ -108,7 +108,7 @@ sum=sum/total;
 		}
 	 
    }
-
+	
 int TP=0,FP=0;
 int TN=0,FN=0;	
 	
