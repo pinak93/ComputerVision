@@ -15,7 +15,7 @@ unsigned char *MSF_Binary;
 unsigned char *Image; 
 unsigned char *Thin_Image; 
 	
-unsigned char *dummy; 
+unsigned char *dummy,*dummy2; 
 int i=0,r=0,c=0;
 char T_header[80]; 
 int T_ROWS,T_COLS,T_BYTES,Threshold=atoi(argv[1]);
@@ -34,6 +34,7 @@ MSF_Binary=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 Image=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 Thin_Image=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 dummy=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
+dummy2=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));	
 	T_header[0]=fgetc(fpt);
 fread(MSF,1,T_ROWS*T_COLS,fpt); 
 fclose(fpt);   
@@ -77,7 +78,13 @@ for(r=-7;r<=7;r++){
 			
 	}
  }
-		int Thining=3;
+		
+	for (i=0; i<T_ROWS*T_COLS; i++) {   
+			dummy[i]=MSF_Binary[i];
+
+			  } 	
+		
+		int Thining=2;
 	while(Thining>=1){
 		Thining--;
 		for(r=-7;r<=7;r++){
@@ -87,76 +94,85 @@ for(r=-7;r<=7;r++){
 			int CA=0;
 			int CB=0;
 			int A1=0,B1=0,C1=0,D1=0;
-			if(MSF_Binary[R*T_COLS+C]==255){
-				if(MSF_Binary[(R-1)*T_COLS+(C-1)]==255){
-					if(MSF_Binary[(R-1)*T_COLS+(C)]==0){
+			if(dummy[R*T_COLS+C]==255){
+				if(dummy[(R-1)*T_COLS+(C-1)]==255){
+					if(dummy[(R-1)*T_COLS+(C)]==0){
 						CA+=1;
 					}
 					CB+=1;
 				}
-				if(MSF_Binary[(R-1)*T_COLS+(C)]==255){
-					if(MSF_Binary[(R-1)*T_COLS+(C+1)]==0){
+				if(dummy[(R-1)*T_COLS+(C)]==255){
+					if(dummy[(R-1)*T_COLS+(C+1)]==0){
 						CA+=1;
 					}
 					CB+=1;A1=1;
 				}
-				if(MSF_Binary[(R-1)*T_COLS+(C+1)]==255){
-					if(MSF_Binary[(R)*T_COLS+(C+1)]==0){
+				if(dummy[(R-1)*T_COLS+(C+1)]==255){
+					if(dummy[(R)*T_COLS+(C+1)]==0){
 						CA+=1;
 					}
 					CB+=1;
 				}
-				if(MSF_Binary[(R)*T_COLS+(C+1)]==255){
-					if(MSF_Binary[(R+1)*T_COLS+(C+1)]==0){
+				if(dummy[(R)*T_COLS+(C+1)]==255){
+					if(dummy[(R+1)*T_COLS+(C+1)]==0){
 						CA+=1;
 					}
 					CB+=1;B1=1;
 				}	
-				if(MSF_Binary[(R+1)*T_COLS+(C+1)]==255){
-					if(MSF_Binary[(R+1)*T_COLS+(C)]==0){
+				if(dummy[(R+1)*T_COLS+(C+1)]==255){
+					if(dummy[(R+1)*T_COLS+(C)]==0){
 						CA+=1;
 					}
 					CB+=1;
 				}	
-				if(MSF_Binary[(R+1)*T_COLS+(C)]==255){
-					if(MSF_Binary[(R+1)*T_COLS+(C-1)]==0){
+				if(dummy[(R+1)*T_COLS+(C)]==255){
+					if(dummy[(R+1)*T_COLS+(C-1)]==0){
 						CA+=1;
 					}
 					CB+=1;D1=1;
 				}
-				if(MSF_Binary[(R+1)*T_COLS+(C-1)]==255){
-					if(MSF_Binary[(R)*T_COLS+(C-1)]==0){
+				if(dummy[(R+1)*T_COLS+(C-1)]==255){
+					if(dummy[(R)*T_COLS+(C-1)]==0){
 						CA+=1;
 					}
 					CB+=1;
 				}
-				if(MSF_Binary[(R)*T_COLS+(C-1)]==255){
-					if(MSF_Binary[(R-1)*T_COLS+(C-1)]==0){
+				if(dummy[(R)*T_COLS+(C-1)]==255){
+					if(dummy[(R-1)*T_COLS+(C-1)]==0){
 						CA+=1;
 					}
 					CB+=1;C1=1;
 				}	
 				if(CA==1 && (CB>=3 && CB<=7) && (A1==0 || B1==0 || (C1==0 && D1==0))){
-					Thin_Image[R*T_COLS+C]=0;
+					dummy2[R*T_COLS+C]=0;
 				}else{
-					Thin_Image[R*T_COLS+C]=255;
+					dummy2[R*T_COLS+C]=255;
 					}
 
 			}
 				else{
-				Thin_Image[R*T_COLS+C]=0;
+				dummy2[R*T_COLS+C]=0;
 			}
 		}
 	}///FOR LOOP
-}
+
+			for (i=0; i<T_ROWS*T_COLS; i++) {   
+			dummy[i]=dummy2[i];
+			  } 		
+}////while loop
+	for (i=0; i<T_ROWS*T_COLS; i++) {   
+			Thin_Image[i]=dummy[i];
+		dummy[i]=0;
+			 }
 bp=0;
 ep=0;
 for(r=-7;r<=7;r++){
     for(c=-4;c<=4;c++){	
 	int C=pixelc+c;
 	int R=pixelr+r;
+			int count=0;
 	if(Thin_Image[R*T_COLS+C]==255){
-		int count=0;	
+		
 				if(Thin_Image[(R-1)*T_COLS+(C-1)]==255){
 					if(Thin_Image[(R-1)*T_COLS+(C)]==0){
 					count++;}
@@ -197,28 +213,29 @@ for(r=-7;r<=7;r++){
 		if(count>=3){
 			bp++;
 		}
-		
-		}
-	}
-}
-	if(bp==1 && ep==1){
-		if(line[0]=='e'){
-			TP++;
-		}
-		else{
-		FP++;
-		}
-	
-	}
-	else{	
-	if(line[0]=='e'){	
-		FN++;
-		}
-		else{
-		TN++;
-		}
-		}		
-	}//Flag==1	
+
+		}////IF 
+	}////FOR
+
+  }///FOR
+				if(bp==1 && ep==1){
+					if(line[0]=='e'){
+						TP++;
+					}
+					else{
+					FP++;
+					}
+
+				}
+				else{	
+				if(line[0]=='e'){	
+					FN++;
+				}
+					else{
+					TN++;
+						}
+					}		
+}//Flag==1	
 else{
 	if(line[0]=='e'){
 	FN++;
@@ -244,4 +261,5 @@ fwrite(Thin_Image,1,T_ROWS*T_COLS,fpt);
 fclose(fpt); 
 		
 }
-	
+
+
