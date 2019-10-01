@@ -13,7 +13,9 @@ FILE *fpt,*fpt1,*fpt2;
 unsigned char *MSF; 
 unsigned char *MSF_Binary;
 unsigned char *Image; 
-unsigned char *Thin_Image; 	
+unsigned char *Thin_Image; 
+	
+unsigned char *dummy; 
 int i=0,r=0,c=0;
 char T_header[80]; 
 int T_ROWS,T_COLS,T_BYTES,Threshold=atoi(argv[1]);
@@ -26,10 +28,12 @@ fpt1=fopen("parenthood.ppm","r");
 fpt2=fopen("parenthood_gt.txt","r");	
     
 i=fscanf(fpt,"%s %d %d %d",T_header,&T_COLS,&T_ROWS,&T_BYTES); 
+i=fscanf(fpt1,"%s %d %d %d",T_header,&T_COLS,&T_ROWS,&T_BYTES); 
 MSF=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 MSF_Binary=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 Image=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 Thin_Image=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
+dummy=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 	T_header[0]=fgetc(fpt);
 fread(MSF,1,T_ROWS*T_COLS,fpt); 
 fclose(fpt);   
@@ -66,16 +70,16 @@ int TN=0,FN=0;
 	  
  
 	if(Flag==1){  
-	
 for(r=-7;r<=7;r++){
     for(c=-4;c<=4;c++){	
 			if(Image[(pixelr+r)*T_COLS+(pixelc+c)]<128){	MSF_Binary[(pixelr+r)*T_COLS+(pixelc+c)]=255;	}
 				else{MSF_Binary[(pixelr+r)*T_COLS+(pixelc+c)]=0;}
-			}
-  		}
-		
-	int Thining=8;	
-while(Thining>1){
+			
+	}
+ }
+		int Thining=3;
+	while(Thining>=1){
+		Thining--;
 		for(r=-7;r<=7;r++){
 			for(c=-4;c<=4;c++){	
 			int C=pixelc+c;
@@ -134,7 +138,7 @@ while(Thining>1){
 				}	
 				if(CA==1 && (CB>=3 && CB<=7) && (A1==0 || B1==0 || (C1==0 && D1==0))){
 					Thin_Image[R*T_COLS+C]=0;
-					}else{
+				}else{
 					Thin_Image[R*T_COLS+C]=255;
 					}
 
@@ -144,8 +148,7 @@ while(Thining>1){
 			}
 		}
 	}///FOR LOOP
-	Thining--;
-}////THINING WHILE
+}
 bp=0;
 ep=0;
 for(r=-7;r<=7;r++){
@@ -154,28 +157,50 @@ for(r=-7;r<=7;r++){
 	int R=pixelr+r;
 	if(Thin_Image[R*T_COLS+C]==255){
 		int count=0;	
-			if(Thin_Image[(R-1)*T_COLS+C]==255){count++;}
-			if(Thin_Image[(R)*T_COLS+(C+1)]==255){count++;}
-			if(Thin_Image[(R+1)*T_COLS+C]==255){count++;}
-			if(Thin_Image[(R)*T_COLS+(C-1)]==255){count++;}
-			
-		if(count>=3){
-			bp++;
-		}
-			if(Thin_Image[(R-1)*T_COLS+(C-1)]==255){count++;}
-			if(Thin_Image[(R-1)*T_COLS+(C+1)]==255){count++;}
-			if(Thin_Image[(R+1)*T_COLS+(C+1)]==255){count++;}
-			if(Thin_Image[(R+1)*T_COLS+(C-1)]==255){count++;}
+				if(Thin_Image[(R-1)*T_COLS+(C-1)]==255){
+					if(Thin_Image[(R-1)*T_COLS+(C)]==0){
+					count++;}
+				}
+				if(Thin_Image[(R-1)*T_COLS+(C)]==255){
+					if(Thin_Image[(R-1)*T_COLS+(C+1)]==0){
+					count++;}
+				}
+				if(Thin_Image[(R-1)*T_COLS+(C+1)]==255){
+					if(Thin_Image[(R)*T_COLS+(C+1)]==0){
+					count++;}
+				}
+				if(Thin_Image[(R)*T_COLS+(C+1)]==255){
+					if(Thin_Image[(R+1)*T_COLS+(C+1)]==0){
+					count++;}
+				}	
+				if(Thin_Image[(R+1)*T_COLS+(C+1)]==255){
+					if(Thin_Image[(R+1)*T_COLS+(C)]==0){
+					count++;}
+				}	
+				if(Thin_Image[(R+1)*T_COLS+(C)]==255){
+					if(Thin_Image[(R+1)*T_COLS+(C-1)]==0){
+					count++;}
+				}
+				if(Thin_Image[(R+1)*T_COLS+(C-1)]==255){
+					if(Thin_Image[(R)*T_COLS+(C-1)]==0){
+					count++;}	
+					}
+				if(Thin_Image[(R)*T_COLS+(C-1)]==255){
+					if(Thin_Image[(R-1)*T_COLS+(C-1)]==0){
+					count++;}
+				}	
 		
 	
 		if(count==1){
 			ep++;
 		}
+		if(count>=3){
+			bp++;
+		}
 		
 		}
 	}
 }
-
 	if(bp==1 && ep==1 && line[0]=='e'){
 	TP++;
 	}
