@@ -201,20 +201,23 @@ for(r=-7;r<=7;r++){
 		}
 	}
 }
-	if(bp==1 && ep==1 && line[0]=='e'){
-	TP++;
+	if(bp==1 && ep==1){
+		if(line[0]=='e'){
+			TP++;
+		}
+		else{
+		FP++;
+		}
+	
 	}
-	if(bp==1 && ep==1 && line[0]!='e'){
-	FP++;
-	}
-	if((bp!=1 || ep!=1) && line[0]=='e'){
-	FN++;
-	}	
-	if((bp!=1 || ep!=1) && line[0]!='e'){
-	TN++;
-	}
-
-		
+	else{	
+	if(line[0]=='e'){	
+		FN++;
+		}
+		else{
+		TN++;
+		}
+		}		
 	}//Flag==1	
 else{
 	if(line[0]=='e'){
@@ -224,14 +227,10 @@ else{
 	TN++;
 	}	
 } 
-	  
-	  
-//printf("%c %d %d %d %d %d %d %d %d\n",line[0],Flag,bp,ep,TP,FP,FN,TN,TP+FP+FN+TN);	  
-	  
-	  
+
 	  
 }//While Loop
-		printf("%d %d %d %d %d\n",TP,FP,FN,TN,TP+FP+FN+TN);	
+		printf("Tp=%d FP=%d FN=%d TN=%d Total=%d TotalE=%d\n",TP,FP,FN,TN,TP+FP+FN+TN,TP+FN);	
 	
 	
 fpt=fopen("Image.ppm","w"); 
