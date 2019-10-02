@@ -15,7 +15,7 @@ unsigned char *MSF_Binary;
 unsigned char *Image; 
 unsigned char *Thin_Image; 
 	
-unsigned char *dummy,*dummy2; 
+unsigned char *dummy,*dummy2,*testing; 
 int i=0,r=0,c=0;
 char T_header[80]; 
 int T_ROWS,T_COLS,T_BYTES,Threshold=atoi(argv[1]);
@@ -34,7 +34,8 @@ MSF_Binary=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 Image=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 Thin_Image=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
 dummy=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
-dummy2=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));	
+dummy2=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));
+testing=(unsigned char *)calloc(T_ROWS*T_COLS,sizeof(unsigned char));	
 	T_header[0]=fgetc(fpt);
 fread(MSF,1,T_ROWS*T_COLS,fpt); 
 fclose(fpt);   
@@ -84,9 +85,9 @@ for(r=-7;r<=7;r++){
 
 			  } 	
 		
-		int Thining=2;
-	while(Thining>=1){
-		Thining--;
+		int Thining=1;
+	while(Thining==1){
+		Thining=0;
 		for(r=-7;r<=7;r++){
 			for(c=-4;c<=4;c++){	
 			int C=pixelc+c;
@@ -144,7 +145,7 @@ for(r=-7;r<=7;r++){
 					CB+=1;C1=1;
 				}	
 				if(CA==1 && (CB>=3 && CB<=7) && (A1==0 || B1==0 || (C1==0 && D1==0))){
-					dummy2[R*T_COLS+C]=0;
+					dummy2[R*T_COLS+C]=0;Thining=1;
 				}else{
 					dummy2[R*T_COLS+C]=255;
 					}
@@ -223,13 +224,13 @@ for(r=-7;r<=7;r++){
 						TP++;
 					}
 					else{
-					FP++;
+					FP++;	
 					}
 
 				}
 				else{	
 				if(line[0]=='e'){	
-					FN++;
+					FN++;	
 				}
 					else{
 					TN++;
