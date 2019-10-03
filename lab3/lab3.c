@@ -81,9 +81,10 @@ for(r=-7;r<=7;r++){
 	}
  }
 		
-	for (i=0; i<T_ROWS*T_COLS; i++) {   
-			dummy[i]=MSF_Binary[i];
-
+	for(r=-7;r<=7;r++){
+			for(c=-4;c<=4;c++){	
+			dummy[(pixelr+r)*T_COLS+(pixelc+c)]=MSF_Binary[(pixelr+r)*T_COLS+(pixelc+c)];
+			}
 			  } 	
 	
 	  ///************Thining****************/////////////////	
@@ -159,14 +160,21 @@ for(r=-7;r<=7;r++){
 		}
 	}///FOR LOOP
 
-			for (i=0; i<T_ROWS*T_COLS; i++) {   
-			dummy[i]=dummy2[i];
-			  } 		
+	for(r=-7;r<=7;r++){
+			for(c=-4;c<=4;c++){	
+
+			dummy[(pixelr+r)*T_COLS+(pixelc+c)]=dummy2[(pixelr+r)*T_COLS+(pixelc+c)];
+			}
+			} 		
 }////while loop
-	for (i=0; i<T_ROWS*T_COLS; i++) {   
-			Thin_Image[i]=dummy[i];
-		dummy[i]=0;
-			 }
+
+	for(r=-7;r<=7;r++){
+			for(c=-4;c<=4;c++){	
+
+			Thin_Image[(pixelr+r)*T_COLS+(pixelc+c)]=dummy[(pixelr+r)*T_COLS+(pixelc+c)];
+		testing[(pixelr+r)*T_COLS+(pixelc+c)]=Thin_Image[(pixelr+r)*T_COLS+(pixelc+c)];
+			}
+			}
 bp=0;
 ep=0;
 
@@ -214,9 +222,11 @@ for(r=-7;r<=7;r++){
 	
 		if(count==1){
 			ep++;
+		testing[R*T_COLS+C]=150;
 		}
 		if(count>=3){
 			bp++;
+		testing[R*T_COLS+C]=150;
 		}
 
 		}////IF 
@@ -235,11 +245,6 @@ for(r=-7;r<=7;r++){
 				else{	
 				if(line[0]=='e'){	
 					FN++;
-					for(r=-7;r<=7;r++){
-    for(c=-4;c<=4;c++){	
-					testing[(pixelr+r)*T_COLS+(pixelc+c)]=Thin_Image[(pixelr+r)*T_COLS+(pixelc+c)];
-	}
-					}
 				}
 					else{
 					TN++;
