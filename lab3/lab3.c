@@ -234,7 +234,12 @@ for(r=-7;r<=7;r++){
 				}
 				else{	
 				if(line[0]=='e'){	
-					FN++;	
+					FN++;
+					for(r=-7;r<=7;r++){
+    for(c=-4;c<=4;c++){	
+					testing[(pixelr+r)*T_COLS+(pixelc+c)]=Thin_Image[(pixelr+r)*T_COLS+(pixelc+c)];
+	}
+					}
 				}
 					else{
 					TN++;
@@ -258,6 +263,11 @@ else{
 fpt=fopen("Image.ppm","w"); 
 fprintf(fpt,"P5 %d %d 255\n",T_COLS,T_ROWS); 
 fwrite(MSF_Binary,1,T_ROWS*T_COLS,fpt); 
+fclose(fpt); 
+	
+	fpt=fopen("Image1.ppm","w"); 
+fprintf(fpt,"P5 %d %d 255\n",T_COLS,T_ROWS); 
+fwrite(testing,1,T_ROWS*T_COLS,fpt); 
 fclose(fpt); 
 	
 fpt=fopen("Thined.ppm","w"); 
