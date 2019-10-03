@@ -57,7 +57,7 @@ int TN=0,FN=0;
 	pixelr=atoi(token);
 	
   int Flag=0;
-	  
+	  ///************Threshold****************/////////////////
   for(r=-7;r<=7;r++){
     for(c=-4;c<=4;c++){	
 	
@@ -71,6 +71,7 @@ int TN=0,FN=0;
   }	
 	  
  
+	  ///************Creating Binary Image****************/////////////////
 	if(Flag==1){  
 for(r=-7;r<=7;r++){
     for(c=-4;c<=4;c++){	
@@ -84,7 +85,8 @@ for(r=-7;r<=7;r++){
 			dummy[i]=MSF_Binary[i];
 
 			  } 	
-		
+	
+	  ///************Thining****************/////////////////	
 		int Thining=1;
 	while(Thining==1){
 		Thining=0;
@@ -167,6 +169,8 @@ for(r=-7;r<=7;r++){
 			 }
 bp=0;
 ep=0;
+
+	  ///************Counting Branch Point and EndPoint****************/////////////////
 for(r=-7;r<=7;r++){
     for(c=-4;c<=4;c++){	
 	int C=pixelc+c;
