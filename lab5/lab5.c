@@ -24,6 +24,7 @@ int main ()
 	
 FILE *fpt,*ftr; 
 unsigned char *image; 
+unsigned char *image1; 	
 double *external_energy;
 unsigned char *sobe;	
 
@@ -46,6 +47,7 @@ ftr=fopen("ac.txt","r");
 i=fscanf(fpt,"%s %d %d %d",T_header,&COLS,&ROWS,&T_BYTES); 
 	
 image=(unsigned char *)calloc(ROWS*COLS,sizeof(unsigned char));
+image1=(unsigned char *)calloc(ROWS*COLS,sizeof(unsigned char));	
 sobe=(unsigned char *)calloc(ROWS*COLS,sizeof(unsigned char));	
 external_energy=(double *)calloc(ROWS*COLS,sizeof(double)); 
 image_inverse=(int *)calloc(ROWS*COLS,sizeof(int));
@@ -66,7 +68,9 @@ int sobely[]={-1,-2,-1,
 T_header[0]=fgetc(fpt);
 fread(image,1,ROWS*COLS,fpt); 
 fclose(fpt);   
-
+	for(int i=0;i<ROWS*COLS;i++){
+	image1[i]=image[i];
+	}
 	//Read Contour Points
 	int index=0;
   while ((read = getline(&line, &len, ftr)) != -1) {
@@ -189,13 +193,20 @@ fclose(fpt);
 			cr_points[i]=moved_cr_points[i];	
 			}
 	run++;
-	}
+	}	
+	fpt=fopen("start.ppm","w"); 
+fprintf(fpt,"P5 %d %d 255\n",COLS,ROWS); 
+fwrite(image,1,ROWS*COLS,fpt); 
+fclose(fpt); 	
 	for(int i=0;i<contour_points;i++){
-			for(int r=-2;r<=2;r++){
+			for(int r=-3;r<=3;r++){
+				image1[((cr_points[i]+r)*COLS)+cc_points[i]]=255;
+				image1[(cr_points[i]*COLS)+(cc_points[i]+r)]=255;
 				image[((cr_points[i]+r)*COLS)+cc_points[i]]=255;
 				image[(cr_points[i]*COLS)+(cc_points[i]+r)]=255;
-
+			
 			  }
+		printf("%d %d\n",cc_points[i],cr_points[i]);
 			}
 	
 	
@@ -204,10 +215,14 @@ fpt=fopen("sobel.ppm","w");
 fprintf(fpt,"P5 %d %d 255\n",COLS,ROWS); 
 fwrite(sobe,1,ROWS*COLS,fpt); 
 fclose(fpt); 
-
-fpt=fopen("start.ppm","w"); 
+fpt=fopen("final1.ppm","w"); 
 fprintf(fpt,"P5 %d %d 255\n",COLS,ROWS); 
 fwrite(image,1,ROWS*COLS,fpt); 
+fclose(fpt); 
+
+fpt=fopen("final.ppm","w"); 
+fprintf(fpt,"P5 %d %d 255\n",COLS,ROWS); 
+fwrite(image1,1,ROWS*COLS,fpt); 
 fclose(fpt); 	
 	
 	
