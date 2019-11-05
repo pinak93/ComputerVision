@@ -200,8 +200,8 @@ fwrite(image,1,ROWS*COLS,fpt);
 fclose(fpt); 	
 	for(int i=0;i<contour_points;i++){
 			for(int r=-3;r<=3;r++){
-				image1[((cr_points[i]+r)*COLS)+cc_points[i]]=255;
-				image1[(cr_points[i]*COLS)+(cc_points[i]+r)]=255;
+				image1[((cr_points[i]+r)*COLS)+cc_points[i]]=0;
+				image1[(cr_points[i]*COLS)+(cc_points[i]+r)]=0;
 				image[((cr_points[i]+r)*COLS)+cc_points[i]]=255;
 				image[(cr_points[i]*COLS)+(cc_points[i]+r)]=255;
 			
