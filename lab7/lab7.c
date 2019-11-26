@@ -4,8 +4,8 @@
 #include <string.h> 
 #include <math.h>
 
-#define AccThreshold 0.0009
-#define GyroThreshold 0.03
+#define AccThreshold 0.003
+#define GyroThreshold 0.005
 #define Gravity 9.81
 #define sample_windowtime 0.05
 
@@ -100,7 +100,7 @@ float *Acc_movement,*gyro_movement;
 	ftr1=fopen("event.txt","w");
 
 	
-	while(window<=30){
+	while(window<=50){
 	fprintf(ftr1,"Accelerometer Threshold - %f	GyroScope Threshold - %f	Window - %d \n",AccThreshold,GyroThreshold,window);				
 	total=(float *)calloc(6,sizeof(float));	
 	int moving_now=0;
