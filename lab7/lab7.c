@@ -4,8 +4,8 @@
 #include <string.h> 
 #include <math.h>
 
-#define AccThreshold 0.003
-#define GyroThreshold 0.005
+#define AccThreshold 0.0009
+#define GyroThreshold 0.03
 #define Gravity 9.81
 #define sample_windowtime 0.05
 
@@ -97,7 +97,7 @@ float *Acc_movement,*gyro_movement;
 	fprintf(ftr,"%f %f %f %f %f %f\n",Smooth_x_acc[i],Smooth_y_acc[i],Smooth_z_acc[i],Smooth_pitch[i],Smooth_roll[i],Smooth_yaw[i]); 
 	}
 	ftr=fopen("TotalData.txt","w");
-	ftr1=fopen("event.txt","w");
+	ftr1=fopen("event1.txt","w");
 
 	
 	while(window<=50){
@@ -166,7 +166,7 @@ fprintf(ftr,"%d %f %f %f %f %f %f \n",i,gyro_movement[0],gyro_movement[1],gyro_m
 			total[3]+=Acc_movement[0];
 			total[4]+=Acc_movement[1];
 			total[5]+=Acc_movement[2];
-fprintf(ftr1,"%d %d %d %f %f %f %f %f %f %f %f \n",Start,end,(end-Start),time[Start],time[end],gyro_movement[0],gyro_movement[1],gyro_movement[2],Acc_movement[0],Acc_movement[1],Acc_movement[2]);		
+fprintf(ftr1,"%d %d %d %f %f %f %f %f %f %f %f \n",Start,end,(end-Start),Start*sample_windowtime,end*sample_windowtime,gyro_movement[0],gyro_movement[1],gyro_movement[2],Acc_movement[0],Acc_movement[1],Acc_movement[2]);		
 	
 	
 
