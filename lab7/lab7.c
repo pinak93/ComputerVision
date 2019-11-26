@@ -4,7 +4,6 @@
 #include <string.h> 
 #include <math.h>
 
-#define window 10
 #define AccThreshold 0.0009
 #define GyroThreshold 0.03
 #define Gravity 9.81
@@ -26,7 +25,7 @@ void smooth(int Smooth_window,int size,float *raw,float *smooth){
 }
 
 
-float Var(float *smooth, int index){
+float Var(float *smooth, int index,int window){
 	float variance=0;
 	float mean=0;
 	float total=0;
@@ -58,7 +57,7 @@ ftr=fopen("acc_gyro.txt","r");
 int size=1250;
 float *time,*x_acc,*y_acc,*z_acc,*pitch,*roll,*yaw;
 float *Smooth_x_acc,*Smooth_y_acc,*Smooth_z_acc,*Smooth_pitch,*Smooth_roll,*Smooth_yaw;
-int Smooth_window=20;
+int window=10;
 time=(float *)calloc(size,sizeof(float)); 
 	
 x_acc=(float *)calloc(size,sizeof(float)); 
@@ -86,12 +85,12 @@ float *Acc_movement,*gyro_movement;
   }	
 
 	///Smoothing
-	smooth(Smooth_window,size,x_acc,Smooth_x_acc);
-	smooth(Smooth_window,size,y_acc,Smooth_y_acc);
-	smooth(Smooth_window,size,z_acc,Smooth_z_acc);
-	smooth(Smooth_window,size,pitch,Smooth_pitch);
-	smooth(Smooth_window,size,roll,Smooth_roll);
-	smooth(Smooth_window,size,yaw,Smooth_yaw);
+	smooth(window,size,x_acc,Smooth_x_acc);
+	smooth(window,size,y_acc,Smooth_y_acc);
+	smooth(window,size,z_acc,Smooth_z_acc);
+	smooth(window,size,pitch,Smooth_pitch);
+	smooth(window,size,roll,Smooth_roll);
+	smooth(window,size,yaw,Smooth_yaw);
 	
 	ftr=fopen("Smooth.txt","w");
 	for(int i=0;i<File_size;i++){	
@@ -99,22 +98,29 @@ float *Acc_movement,*gyro_movement;
 	}
 	ftr=fopen("TotalData.txt","w");
 	ftr1=fopen("event.txt","w");
+
+	
+	while(window<=30){
+	fprintf(ftr1,"Accelerometer Threshold - %f	GyroScope Threshold - %f	Window - %d \n",AccThreshold,GyroThreshold,window);				
+	total=(float *)calloc(6,sizeof(float));	
 	int moving_now=0;
 	int Start=-1;
 	int end=-1;
-	float Now_time;
+	float Now_time;	
+		
 	for(int i=0;i<File_size;i++){
 		////reload
+		
 	vel=(float *)calloc(3,sizeof(float));
 	Acc_movement=(float *)calloc(3,sizeof(float)); 	
 	gyro_movement=(float *)calloc(3,sizeof(float)); 
 			Now_time=time[i];
-		float Var_xacc=Var(x_acc,i);
-		float Var_yacc=Var(y_acc,i);
-		float Var_zacc=Var(z_acc,i);
-		float Var_pitch=Var(pitch,i);
-		float Var_roll=Var(roll,i);
-		float Var_yaw=Var(yaw,i);
+		float Var_xacc=Var(x_acc,i,window);
+		float Var_yacc=Var(y_acc,i,window);
+		float Var_zacc=Var(z_acc,i,window);
+		float Var_pitch=Var(pitch,i,window);
+		float Var_roll=Var(roll,i,window);
+		float Var_yaw=Var(yaw,i,window);
 	//Check if in Rest
 		if(Var_xacc>AccThreshold || Var_yacc>AccThreshold || Var_zacc>AccThreshold){
 			moving_now=1;
@@ -172,12 +178,15 @@ fprintf(ftr1,"%d %f %f %f %f %f %f %f %f \n",(end-Start),time[Start],time[end],g
 		fprintf(ftr,"%d %f %f %f %f %f %f \n",i,gyro_movement[0],gyro_movement[1],gyro_movement[2],Acc_movement[0],Acc_movement[1],Acc_movement[2]);		
 		}
 			moving_now=0;
-	
-		
-		
-	}////Main For
-fprintf(ftr1,"%d %f %f %f %f %f %f %f %f \n",(end-Start),time[Start],time[end],total[0],total[1],total[2],total[3],total[4],total[5]);		
 
+	}////Main For
+fprintf(ftr1,"%d %f %f %f %f %f %f %f %f \n",(end-Start),time[Start],time[end],total[0],total[1],total[2],total[3],total[4],total[5]);	
+
+fprintf(ftr1,"---------------------------------------------------------------------------------------------- \n");	
+fprintf(ftr1,"---------------------------------------------------------------------------------------------- \n");	
+
+		window+=10;
+	}///while
 
 }
 
