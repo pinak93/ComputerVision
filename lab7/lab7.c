@@ -166,7 +166,7 @@ fprintf(ftr,"%d %f %f %f %f %f %f \n",i,gyro_movement[0],gyro_movement[1],gyro_m
 			total[3]+=Acc_movement[0];
 			total[4]+=Acc_movement[1];
 			total[5]+=Acc_movement[2];
-fprintf(ftr1,"%d %f %f %f %f %f %f %f %f \n",(end-Start),time[Start],time[end],gyro_movement[0],gyro_movement[1],gyro_movement[2],Acc_movement[0],Acc_movement[1],Acc_movement[2]);		
+fprintf(ftr1,"%d %d %d %f %f %f %f %f %f %f %f \n",Start,end,(end-Start),time[Start],time[end],gyro_movement[0],gyro_movement[1],gyro_movement[2],Acc_movement[0],Acc_movement[1],Acc_movement[2]);		
 	
 	
 
@@ -180,7 +180,7 @@ fprintf(ftr1,"%d %f %f %f %f %f %f %f %f \n",(end-Start),time[Start],time[end],g
 			moving_now=0;
 
 	}////Main For
-fprintf(ftr1,"%d %f %f %f %f %f %f %f %f \n",(end-Start),time[Start],time[end],total[0],total[1],total[2],total[3],total[4],total[5]);	
+fprintf(ftr1,"%d %d %d %f %f %f %f %f %f %f %f \n",Start,end,(end-Start),time[Start],time[end],total[0],total[1],total[2],total[3],total[4],total[5]);	
 
 fprintf(ftr1,"---------------------------------------------------------------------------------------------- \n");	
 fprintf(ftr1,"---------------------------------------------------------------------------------------------- \n");	
