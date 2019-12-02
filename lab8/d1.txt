@@ -1,0 +1,15 @@
+X: 0.413514, Y: -1.799819, Z: -4.108894
+X: -7.982108, Y: 333.774397, Z: -58.479712
+Region: 1, Number of Pixels: 163
+X: -52.121289, Y: 1.215533, Z: -8.658612
+Region: 2, Number of Pixels: 744
+X: 2.596830, Y: -2.493379, Z: -4.463689
+Region: 3, Number of Pixels: 454
+X: 104.818369, Y: -2.562562, Z: -27.820564
+Region: 4, Number of Pixels: 205
+X: -1.565296, Y: 28.785097, Z: -8.828300
+Region: 5, Number of Pixels: 6773
+X: -1.227892, Y: 8.642128, Z: -2.347285
+Region: 6, Number of Pixels: 243
+X: 2.830629, Y: -1.639295, Z: -4.864602
+Region: 7, Number of Pixels: 415
