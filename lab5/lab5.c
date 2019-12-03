@@ -44,6 +44,7 @@ ssize_t read;
 fpt=fopen("hawk.ppm","r"); 
 ftr=fopen("ac.txt","r");	
     
+	
 i=fscanf(fpt,"%s %d %d %d",T_header,&COLS,&ROWS,&T_BYTES); 
 	
 image=(unsigned char *)calloc(ROWS*COLS,sizeof(unsigned char));
@@ -94,12 +95,15 @@ fclose(fpt);
 							}
 						}//sobel;
 					external_energy[r*COLS+c]=sqrt(pow(gx,2)+pow(gy,2));
+						printf("%lf ",external_energy[r*COLS+c]);
 					if(Smax<external_energy[r*COLS+c]) Smax=external_energy[r*COLS+c];
 					if(Smin>external_energy[r*COLS+c]) Smin=external_energy[r*COLS+c];
 				}
 			}
+	printf("%d %d \n",Smax,Smin);
 			for(int r=1;r<ROWS*COLS;r++){
 				sobe[r]=((external_energy[r]-Smin)*255/(Smax-Smin));
+				printf("%d ",sobe[r]);
 				external_energy[r]=-((external_energy[r]-Smin)/(Smax-Smin));
 			}
 			
@@ -206,7 +210,6 @@ fclose(fpt);
 				image[(cr_points[i]*COLS)+(cc_points[i]+r)]=255;
 			
 			  }
-		printf("%d %d\n",cc_points[i],cr_points[i]);
 			}
 	
 	
